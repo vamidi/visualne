@@ -1,0 +1,22 @@
+{
+	"compilerOptions": {
+		"module": "esnext",
+		"target": "es5",
+		"sourceMap": true,
+		"downlevelIteration": true,
+		"allowJs": true,
+		"strict": true,
+		"isolatedModules": false,
+		"esModuleInterop": true,
+		"noUnusedLocals": true,
+		"noImplicitAny": false,
+		"lib": [
+			"es6",
+			"dom"
+		]
+	},
+	"exclude": [
+		"node_modules"
+	],
+	"include": ["src"]
+}
