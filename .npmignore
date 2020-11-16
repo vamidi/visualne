@@ -1,0 +1,17 @@
+.idea/
+.vscode/
+.github/
+
+node_modules
+src
+test
+types
+
+.babelrc
+.eslintrc
+.eslintignore
+.gitignore
+.npmignore
+
+package-lock.json
+rollup.config.js

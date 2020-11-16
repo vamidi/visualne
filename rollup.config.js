@@ -8,6 +8,7 @@ import { eslint } from 'rollup-plugin-eslint';
 
 const extensions = ['.js', '.jsx', '.ts', '.tsx'];
 const production = !process.env.ROLLUP_WATCH;
+const bundle = 'visualne'
 
 module.exports = {
     // mode: 'development',
@@ -15,18 +16,18 @@ module.exports = {
     output: [
         {
             sourceMap: true,
-            file: 'dist/index.common.js',
+            file: `dist/${bundle}.common.js`,
             format: 'cjs'
         },
         {
             name: 'VisualNE',
             sourceMap: true,
-            file: 'dist/index.umd.js',
+            file: `dist/${bundle}.umd.js`,
             format: 'umd'
         },
         {
             sourceMap: true,
-            file: 'dist/index.esm.js',
+            file: `dist/${bundle}.esm.js`,
             format: 'esm'
         }
     ],

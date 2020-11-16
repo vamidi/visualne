@@ -1,7 +1,9 @@
 {
 	"name": "visualne",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "A CLI for setting up visual editing projects.",
+	"main": "dist/visualne.common.js",
+	"module": "dist/visualne.esm.js",
 	"keywords": [
 		"js",
 		"angular",
@@ -20,7 +22,7 @@
 		"lint:fix": "eslint src --fix --ext .ts",
 		"prebuild": "npm run lint",
 		"prepublishOnly": "npm run build",
-		"publish": "npm publish --access=public build/dist",
+		"publish": "npm publish --access=public",
 		"types": "tsc src/index.ts --target es5 --declaration --outDir ./types --downlevelIteration --emitDeclarationOnly"
 	},
 	"dependencies": {
