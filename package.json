@@ -16,6 +16,14 @@
 	],
 	"author": "Valencio Hoffman",
 	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/vamidi/visualne.git"
+	},
+	"bugs": {
+		"url": "https://github.com/vamidi/visualne/issues"
+	},
+	"homepage": "https://github.com/vamidi/visualne#readme",
 	"scripts": {
 		"build": "npx rollup -c",
 		"lint": "eslint src --ext .ts",
