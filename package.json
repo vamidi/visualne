@@ -4,6 +4,7 @@
 	"description": "A Javascript framework for visual editing projects",
 	"main": "dist/visualne.common.js",
 	"module": "dist/visualne.esm.js",
+	"types": "types/index.d.ts",
 	"keywords": [
 		"js",
 		"angular",

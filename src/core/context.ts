@@ -4,8 +4,6 @@ import { Validator } from "./validator";
 import { EventsTypes as DefaultEvents, Events } from "./events";
 import { IPlugin, Plugin, PluginParams } from "./plugin";
 
-// declare type TestSystemParams = PluginParams & { searchBar: boolean };
-
 /**
  * @brief - Context class
  * This class is the context between the editor and the plugins
