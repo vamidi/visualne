@@ -13,6 +13,13 @@
 		"lib": [
 			"es6",
 			"dom"
+		],
+		"typeRoots": [
+			"./node_modules/@types",
+			"types"
+		],
+		"types": [
+			"node"
 		]
 	},
 	"exclude": [

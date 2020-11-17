@@ -5,7 +5,6 @@
 node_modules
 src
 test
-types
 
 .babelrc
 .eslintrc

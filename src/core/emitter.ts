@@ -27,7 +27,7 @@ export class Emitter<EventTypes> {
   trigger<K extends keyof EventTypes>(
       name: K,
       params: EventTypes[K] | {} = {}
-  ) {
+  ): unknown {
       if (!(name in this.events))
           throw new Error(`The event ${name} cannot be triggered`);
 
@@ -36,14 +36,14 @@ export class Emitter<EventTypes> {
       }, true); // return false if at least one event is false
   }
 
-  bind(name: string) {
+  bind(name: string): void {
       if (this.events[name])
           throw new Error(`The event ${name} is already bound`);
 
       this.events[name] = [];
   }
 
-  exist(name: string) {
+  exist(name: string): boolean {
       return Array.isArray(this.events[name]);
   }
 }

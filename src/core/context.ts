@@ -27,7 +27,7 @@ export class Context<EventsTypes> extends Emitter<EventsTypes & DefaultEvents> {
       this.components = new Map();
   }
 
-  use<
+  public use<
     TSystem extends IPlugin = Plugin,
     KParams extends PluginParams = PluginParams
   >(
@@ -35,7 +35,7 @@ export class Context<EventsTypes> extends Emitter<EventsTypes & DefaultEvents> {
       new (ctx: Context<EventsTypes & DefaultEvents>, ...args: any[]): TSystem;
     },
       attributes?: KParams
-  ) {
+  ): void {
       const plugin = new Ctor(this, attributes);
 
       if (plugin.name && this.plugins.has(plugin.name))
@@ -44,7 +44,7 @@ export class Context<EventsTypes> extends Emitter<EventsTypes & DefaultEvents> {
       this.plugins.set(plugin.name, plugin);
   }
 
-  register(component: Component) {
+  public register(component: Component): void {
       if (this.components.has(component.name))
           throw new Error(`Component ${component.name} already registered`);
 
@@ -52,7 +52,7 @@ export class Context<EventsTypes> extends Emitter<EventsTypes & DefaultEvents> {
       this.trigger("componentRegister", component);
   }
 
-  destroy() {
+  public destroy(): void {
       this.trigger("destroy");
   }
 }

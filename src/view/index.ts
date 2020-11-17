@@ -40,7 +40,7 @@ export class EditorView extends Emitter<EventsTypes> {
       this.container.appendChild(this.area.el);
   }
 
-  addNode(node: Node) {
+  addNode(node: Node): void {
       const component = this.components.get(node.name);
 
       if (!component) throw new Error(`Component ${node.name} not found`);
@@ -51,7 +51,7 @@ export class EditorView extends Emitter<EventsTypes> {
       this.area.appendChild(nodeView.el);
   }
 
-  removeNode(node: Node) {
+  removeNode(node: Node): void {
       const nodeView = this.nodes.get(node);
 
       this.nodes.delete(node);
@@ -61,7 +61,7 @@ export class EditorView extends Emitter<EventsTypes> {
       }
   }
 
-  addConnection(connection: Connection) {
+  addConnection(connection: Connection): void {
       if (!connection.input.node || !connection.output.node)
           throw new Error("Connection input or output not added to node");
 

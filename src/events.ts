@@ -6,7 +6,7 @@ import { EditorView } from "./view";
 import { Input } from "./input";
 import { Node } from "./node";
 import { Output } from "./output";
-import { Socket } from "./socket";
+import { BindControl, BindSocket, Socket } from "./socket";
 import { EventsTypes as DefaultEventsTypes, Events } from "./core/events";
 import { Mouse, Transform, ZoomSource } from "./view/area";
 
@@ -82,8 +82,8 @@ export interface EventsTypes extends DefaultEventsTypes {
     el: HTMLElement;
     node: Node;
     component: object;
-    bindSocket: Function;
-    bindControl: Function;
+    bindSocket: BindSocket;
+    bindControl: BindControl;
   };
   rendersocket: {
     el: HTMLElement;

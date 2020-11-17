@@ -7,6 +7,7 @@ import { Input } from "./input";
 import { Node } from "./node";
 import { NodeEditor } from "./editor";
 import { Output } from "./output";
+import { Plugin } from "./core/plugin";
 import { Socket } from "./socket";
 import { Engine, Recursion } from "./engine";
 
@@ -20,6 +21,7 @@ export { IO } from "./io";
 export { Node } from "./node";
 export { NodeEditor } from "./editor";
 export { Output } from "./output";
+export { Plugin } from "./core/plugin";
 export { Socket } from "./socket";
 
 export default {
@@ -34,5 +36,6 @@ export default {
     Node,
     NodeEditor,
     Output,
-    Socket
+    Socket,
+    Plugin
 };

@@ -3,7 +3,7 @@ import { Context } from "../core/context";
 import { Recursion } from "./recursion";
 import { State } from "./state";
 import { Validator } from "../core/validator";
-import { Data, NodeData, WorkerOutputs } from "../core/data";
+import { Data, NodeData, WorkerInputs, WorkerOutputs } from "../core/data";
 import { EngineEvents, EventsTypes } from "./events";
 export { Component, Recursion };
 
@@ -17,13 +17,15 @@ export class Engine extends Context<EventsTypes> {
   args: unknown[] = [];
   data: Data | null = null;
   state = State.AVAILABLE;
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   onAbort = () => {};
+  // eslint-enable-next-line @typescript-eslint/explicit-module-boundary-types
 
   constructor(id: string) {
       super(id, new EngineEvents());
   }
 
-  public clone() {
+  public clone(): Engine {
       const engine = new Engine(this.id);
 
       this.components.forEach((c) => engine.register(c));
@@ -31,7 +33,7 @@ export class Engine extends Context<EventsTypes> {
       return engine;
   }
 
-  async throwError(message: string, data: unknown = null) {
+  async throwError(message: string, data: unknown = null): Promise<string> {
       await this.abort();
       this.trigger("error", { message, data });
       this.processDone();
@@ -39,7 +41,7 @@ export class Engine extends Context<EventsTypes> {
       return "error";
   }
 
-  private processStart() {
+  private processStart(): boolean {
       if (this.state === State.AVAILABLE) {
           this.state = State.PROCESSED;
           return true;
@@ -54,7 +56,7 @@ export class Engine extends Context<EventsTypes> {
       return false;
   }
 
-  private processDone() {
+  private processDone(): boolean {
       const success = this.state !== State.ABORT;
 
       this.state = State.AVAILABLE;
@@ -67,7 +69,7 @@ export class Engine extends Context<EventsTypes> {
       return success;
   }
 
-  public async abort() {
+  public async abort(): Promise<unknown> {
       return new Promise((ret) => {
           if (this.state === State.PROCESSED) {
               this.state = State.ABORT;
@@ -79,7 +81,7 @@ export class Engine extends Context<EventsTypes> {
       });
   }
 
-  private async lock(node: EngineNode) {
+  private async lock(node: EngineNode): Promise<unknown> {
       return new Promise((res) => {
           node.unlockPool = node.unlockPool || [];
           if (node.busy && !node.outputData) node.unlockPool.push(res);
@@ -89,14 +91,14 @@ export class Engine extends Context<EventsTypes> {
       });
   }
 
-  unlock(node: EngineNode) {
+  unlock(node: EngineNode): void {
       node.unlockPool.forEach((a) => a());
       node.unlockPool = [];
       node.busy = false;
   }
 
-  private async extractInputData(node: NodeData) {
-      const obj: { [id: string]: any } = {};
+  private async extractInputData(node: NodeData): Promise<{ [key: string]: unknown[] }> {
+      const obj: { [id: string]: unknown[] } = {};
 
       for (const key of Object.keys(node.inputs)) {
           const input = node.inputs[key];
@@ -117,9 +119,9 @@ export class Engine extends Context<EventsTypes> {
   }
 
   private async processWorker(node: NodeData) {
-      const inputData = await this.extractInputData(node);
+      const inputData: WorkerInputs = await this.extractInputData(node);
       const component = this.components.get(node.name) as Component;
-      const outputData = {};
+      const outputData: WorkerOutputs = {};
 
       try {
           await component.worker(node, inputData, outputData, ...this.args);
@@ -163,7 +165,7 @@ export class Engine extends Context<EventsTypes> {
       );
   }
 
-  copy(data: Data) {
+  copy(data: Data): Data {
       data = Object.assign({}, data);
       data.nodes = Object.assign({}, data.nodes);
 
@@ -173,7 +175,7 @@ export class Engine extends Context<EventsTypes> {
       return data;
   }
 
-  async validate(data: Data) {
+  async validate(data: Data): Promise<boolean | string> {
       const checking = Validator.validate(this.id, data);
       const recursion = new Recursion(data.nodes);
 
@@ -216,7 +218,7 @@ export class Engine extends Context<EventsTypes> {
       data: Data,
       startId: number | string | null = null,
       ...args: T
-  ) {
+  ): Promise<void | boolean | string> {
       if (!this.processStart()) return;
       if (!(await this.validate(data))) return;
 
