@@ -37,6 +37,7 @@
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/no-parameter-properties": "off",
     "@typescript-eslint/no-inferrable-types": "off",
+    "@typescript-eslint/no-shadow": ["error"],
     "comma-dangle": [1, "never"],
     "no-cond-assign": 1,
     "no-console": 0,
@@ -78,7 +79,8 @@
     "no-redeclare": 1,
     "no-self-compare": 1,
     "init-declarations": 1,
-    "no-shadow": 2,
+    // note you must disable the base rule as it can report incorrect errors
+    "no-shadow": "off",
     "no-undef": "error",
     "no-undefined": 2,
     "no-unused-vars": [2, { "argsIgnorePattern": "^_" }],

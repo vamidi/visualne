@@ -1,25 +1,24 @@
-import { IO } from './io';
-import { Control } from './control';
+import { Control } from "./control";
+import { IO } from "./io";
 
-export type SocketType = 'input' | 'output';
-export declare type SocketColorType = 'normal' | 'exec';
-export type BindSocket = (el: HTMLElement, type: SocketType, io: IO) => void;
+export type BindSocket = (el: HTMLElement, type: string, io: IO) => void;
 export type BindControl = (el: HTMLElement, control: Control) => void;
 
-export class Socket {
-    name: string;
-    data: unknown;
-    socketType: SocketColorType;
-    compatible: Socket[] = [];
+export class Socket
+{
+    public name: string;
+    public data: unknown;
+    public compatible: Socket[] = [];
 
-    constructor(name: string, data: {
-        name?: string;
-        data?: {};
-        socketType?: SocketColorType;
-    } = {}) {
+    public get Color(): string { return this.color; }
+    public set Color(c: string) { this.color = c; }
+
+    private color: string;
+
+    constructor(name: string, color: string = "#fff", data = {}) {
         this.name = name;
+        this.color = color;
         this.data = data;
-        this.socketType = data.socketType ?? 'normal';
         this.compatible = [];
     }
 

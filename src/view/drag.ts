@@ -1,5 +1,13 @@
 import { listenWindow } from "./utils";
 
+enum EPointerButton {
+    LEFT_CLICK = 0, // Main button pressed, usually the left button or the un-initialized state
+    MIDDLE_CLICK = 1, // Auxiliary button pressed, usually the wheel button or the middle button (if present)
+    RIGHT_CLICK = 2, // Secondary button pressed, usually the right button
+    // Fourth button, typically the Browser Back button
+    // Fifth button, typically the Browser Forward button
+}
+
 export class Drag {
   pointerStart: [number, number] | null;
   el: HTMLElement;
@@ -26,15 +34,15 @@ export class Drag {
       };
   }
 
-  down(e: PointerEvent) {
-      if (e.pointerType === "mouse" && e.button !== 0) return;
+  down(e: PointerEvent): void {
+      if (e.pointerType === "mouse" && e.button !== EPointerButton.LEFT_CLICK) return;
       e.stopPropagation();
       this.pointerStart = [e.pageX, e.pageY];
 
       this.onStart(e);
   }
 
-  move(e: PointerEvent) {
+  move(e: PointerEvent): void {
       if (!this.pointerStart) return;
       e.preventDefault();
 
@@ -47,7 +55,7 @@ export class Drag {
       this.onTranslate(delta[0] / zoom, delta[1] / zoom, e);
   }
 
-  up(e: PointerEvent) {
+  up(e: PointerEvent): void {
       if (!this.pointerStart) return;
 
       this.pointerStart = null;

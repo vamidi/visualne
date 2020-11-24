@@ -1,5 +1,6 @@
 import { Component } from "./component";
 import { Connection } from "./connection";
+import { Context } from "./core/context";
 import { Control } from "./control";
 import { Emitter } from "./core/emitter";
 import { IO } from "./io";
@@ -15,6 +16,7 @@ export { Engine, Recursion } from "./engine";
 export { Component } from "./component";
 export { Control } from "./control";
 export { Connection } from "./connection";
+export { Context } from "./core/context";
 export { Emitter } from "./core/emitter";
 export { Input } from "./input";
 export { IO } from "./io";
@@ -24,12 +26,16 @@ export { Output } from "./output";
 export { Plugin } from "./core/plugin";
 export { Socket } from "./socket";
 
+export { IPlugin, PluginParams } from "./core/plugin";
+export { SocketColorType } from "./socket";
+
 export default {
     Engine,
     Recursion,
     Component,
     Control,
     Connection,
+    Context,
     Emitter,
     Input,
     IO,
