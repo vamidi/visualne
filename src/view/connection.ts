@@ -22,7 +22,7 @@ export class ConnectionView extends Emitter<EventsTypes> {
 
       this.el = document.createElement("div");
       this.el.style.position = "absolute";
-      this.el.style.zIndex = "-1";
+      this.el.style.zIndex = "0";
 
       this.trigger("renderconnection", {
           el: this.el,

@@ -15,15 +15,15 @@ module.exports = {
     input: 'src/index.ts',
     output: [
         {
+            name: 'VisualNE',
+            sourceMap: true,
+            file: `dist/${bundle}.min.js`,
+            format: 'umd'
+        },
+        {
             sourceMap: true,
             file: `dist/${bundle}.common.js`,
             format: 'cjs'
-        },
-        {
-            name: 'VisualNE',
-            sourceMap: true,
-            file: `dist/${bundle}.umd.js`,
-            format: 'umd'
         },
         {
             sourceMap: true,

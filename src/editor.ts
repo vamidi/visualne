@@ -1,18 +1,18 @@
 import { Component } from "./component";
 import { Connection } from "./connection";
 import { Context } from "./core/context";
-import { Data } from "./core/data";
-import { EditorView } from "./view";
+import { EditorView } from "./view/index";
 import { Input } from "./input";
 import { Node } from "./node";
 import { Output } from "./output";
 import { Selected } from "./selected";
 import { Validator } from "./core/validator";
 import { listenWindow } from "./view/utils";
+import { Data, HashSet } from "./core/data";
 import { EditorEvents, EventsTypes } from "./events";
 
 export class NodeEditor extends Context<EventsTypes> {
-  nodes: Set<Node> = new Set<Node>();
+  nodes: HashSet<Node> = new HashSet<Node>();
   selected = new Selected();
   view: EditorView;
 

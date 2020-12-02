@@ -109,7 +109,7 @@
     "max-depth": [1, 4],
     "max-len": ["warn", 120],
     "max-params": [1, 6],
-    "max-statements": [1, 10]
+    "max-statements": [1, 11]
   },
   "plugins": ["@typescript-eslint"],
   "parserOptions": {
