@@ -6,8 +6,8 @@ export abstract class Component {
   data: unknown = {};
   engine: Engine | null = null;
 
-  constructor(name: string) {
-      this.name = name;
+  protected constructor(name: string) {
+    this.name = name;
   }
 
   abstract worker(

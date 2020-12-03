@@ -6,24 +6,24 @@ export abstract class Component extends ComponentWorker {
   editor: NodeEditor | null = null;
   data: unknown = {};
 
-  constructor(name: string) {
-      super(name);
+  protected constructor(name: string) {
+    super(name);
   }
 
   abstract async builder(node: Node): Promise<void>;
 
-  async build(node: Node) {
-      await this.builder(node);
+  public async build(node: Node): Promise<Node> {
+    await this.builder(node);
 
-      return node;
+    return node;
   }
 
-  async createNode(data = {}) {
-      const node = new Node(this.name);
+  public async createNode(data = {}): Promise<Node> {
+    const node = new Node(this.name);
 
-      node.data = data;
-      await this.build(node);
+    node.data = data;
+    await this.build(node);
 
-      return node;
+    return node;
   }
 }

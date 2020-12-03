@@ -38,6 +38,7 @@
     "@typescript-eslint/no-parameter-properties": "off",
     "@typescript-eslint/no-inferrable-types": "off",
     "@typescript-eslint/no-shadow": ["error"],
+    "@typescript-eslint/no-unused-vars": [2, { "argsIgnorePattern": "^_" }],
     "comma-dangle": [1, "never"],
     "no-cond-assign": 1,
     "no-console": 0,
@@ -93,7 +94,7 @@
       "before": false,
       "after": true
     }],
-    "indent": ["warn", 4],
+    "indent": ["warn", 2],
     "new-cap": [1, {
       "newIsCap": true
     }],
@@ -109,7 +110,7 @@
     "max-depth": [1, 4],
     "max-len": ["warn", 120],
     "max-params": [1, 6],
-    "max-statements": [1, 11]
+    "max-statements": [1, 12]
   },
   "plugins": ["@typescript-eslint"],
   "parserOptions": {
