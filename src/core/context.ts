@@ -1,4 +1,4 @@
-import { Component } from "../engine";
+import { Component } from "../engine/index";
 import { Emitter } from "./emitter";
 import { Validator } from "./validator";
 import { EventsTypes as DefaultEvents, Events } from "./events";
@@ -14,7 +14,8 @@ export class Context<EventsTypes> extends Emitter<EventsTypes & DefaultEvents> {
   plugins: Map<string, IPlugin>;
   components: Map<string, Component>;
 
-  constructor(id: string, events: Events) {
+  constructor(id: string, events: Events)
+  {
       super(events);
 
       if (!Validator.isValidId(id))

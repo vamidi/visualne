@@ -15,15 +15,11 @@ module.exports = {
     input: 'src/index.ts',
     output: [
         {
+            name: 'VisualNE',
             sourceMap: true,
-            file: `dist/${bundle}.common.js`,
-            format: 'cjs'
+            file: `dist/${bundle}.min.js`,
+            format: 'umd'
         },
-        {
-            sourceMap: true,
-            file: `dist/${bundle}.esm.js`,
-            format: 'esm'
-        }
     ],
     plugins: [
         sourcemaps(),
@@ -42,5 +38,6 @@ module.exports = {
             exclude: './node_modules/**',
             extensions,
         }),
+        production && terser(),
     ]
 };

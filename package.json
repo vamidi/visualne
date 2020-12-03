@@ -1,6 +1,6 @@
 {
 	"name": "visualne",
-	"version": "1.0.6",
+	"version": "1.0.7",
 	"description": "A Javascript framework for visual editing projects",
 	"main": "dist/visualne.common.js",
 	"module": "dist/visualne.esm.js",
@@ -26,7 +26,7 @@
 	},
 	"homepage": "https://github.com/vamidi/visualne#readme",
 	"scripts": {
-		"build": "npx rollup -c",
+		"build": "npx rollup -c && rollup --c rollup.minify.config.js",
 		"lint": "eslint src --ext .ts",
 		"lint:fix": "eslint src --fix --ext .ts",
 		"prebuild": "npm run lint && npm run types",

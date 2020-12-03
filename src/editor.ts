@@ -1,58 +1,38 @@
 import { Component } from "./component";
 import { Connection } from "./connection";
 import { Context } from "./core/context";
+import { Data } from "./core/data";
 import { EditorView } from "./view/index";
 import { Input } from "./input";
 import { Node } from "./node";
 import { Output } from "./output";
 import { Selected } from "./selected";
 import { Validator } from "./core/validator";
-import { listenWindow } from "./view/utils";
-import { Data, HashSet } from "./core/data";
 import { EditorEvents, EventsTypes } from "./events";
+import { OnConnect, OnConnected, OnCreated, OnDestroyed, OnDisconnect, OnDisconnected } from "./core/interfaces";
+import { hook, listenWindow } from "./view/utils";
 
-export class NodeEditor extends Context<EventsTypes> {
-  nodes: HashSet<Node> = new HashSet<Node>();
+export class NodeEditor extends Context<EventsTypes>
+{
+  nodes: Node[] = new Array<Node>();
   selected = new Selected();
   view: EditorView;
+  args: {lifecycleHooks?: boolean };
 
-  constructor(id: string, container: HTMLElement) {
+  constructor(id: string, container: HTMLElement, params: { lifecycleHooks?: boolean } = { lifecycleHooks: true })
+  {
       super(id, new EditorEvents());
 
       this.view = new EditorView(container, this.components, this);
+      this.args = params;
 
-      this.on(
-          "destroy",
-          listenWindow("keydown", (e) => this.trigger("keydown", e))
-      );
-      this.on(
-          "destroy",
-          listenWindow("keyup", (e) => this.trigger("keyup", e))
-      );
-
-      this.on("selectnode", ({ node, accumulate }) =>
-          this.selectNode(node, accumulate)
-      );
-      this.on("nodeselected", () =>
-          this.selected.each((n) => {
-              const nodeView = this.view.nodes.get(n);
-
-              nodeView && nodeView.onStart();
-          })
-      );
-      this.on("translatenode", ({ dx, dy }) =>
-          this.selected.each((n) => {
-              const nodeView = this.view.nodes.get(n);
-
-              nodeView && nodeView.onDrag(dx, dy);
-          })
-      );
+      this.initEvents();
   }
 
   addNode(node: Node) {
       if (!this.trigger("nodecreate", node)) return;
 
-      this.nodes.add(node);
+      this.nodes.push(node);
       this.view.addNode(node);
 
       this.trigger("nodecreated", node);
@@ -63,7 +43,7 @@ export class NodeEditor extends Context<EventsTypes> {
 
       node.getConnections().forEach((c) => this.removeConnection(c));
 
-      this.nodes.delete(node);
+      this.nodes.splice(this.nodes.indexOf(node), 1);
       this.view.removeNode(node);
 
       this.trigger("noderemoved", node);
@@ -94,7 +74,7 @@ export class NodeEditor extends Context<EventsTypes> {
   }
 
   selectNode(node: Node, accumulate: boolean = false) {
-      if (!this.nodes.has(node)) throw new Error("Node not exist in list");
+      if (this.nodes.indexOf(node) === -1) throw new Error("Node not exist in list");
 
       if (!this.trigger("nodeselect", node)) return;
 
@@ -190,5 +170,70 @@ export class NodeEditor extends Context<EventsTypes> {
       }
 
       return this.afterImport();
+  }
+
+  private initEvents(): void {
+      this.on(
+          "destroy",
+          listenWindow("keydown", (e) => this.trigger("keydown", e))
+      );
+      this.on(
+          "destroy",
+          listenWindow("keyup", (e) => this.trigger("keyup", e))
+      );
+
+      this.on("selectnode", ({ node, accumulate }) =>
+          this.selectNode(node, accumulate)
+      );
+
+      this.on("nodeselected", () =>
+          this.selected.each((n) => {
+              const nodeView = this.view.nodes.get(n);
+
+              nodeView && nodeView.onStart();
+          })
+      );
+
+      this.on("translatenode", ({ dx, dy }) =>
+          this.selected.each((n) => {
+              const nodeView = this.view.nodes.get(n);
+
+              nodeView && nodeView.onDrag(dx, dy);
+          })
+      );
+
+      // If we want to have lifecycle hooks
+      if (this.args.lifecycleHooks)
+      {
+          this.on("nodecreated", node =>
+              hook<OnCreated>(this, node.name, "onCreated")(node),
+          );
+
+          this.on("noderemoved", node =>
+              hook<OnDestroyed>(this, node.name, "onDestroyed")(node)
+          );
+
+          this.on("connectioncreate", ({input, output}) => {
+              if (!hook<OnConnect>(this, input.node?.name, "onConnected")(input) ||
+                  !hook<OnConnect>(this, output.node?.name, "onConnected")(output))
+                  return false;
+          });
+
+          this.on("connectioncreated", connection => {
+              hook<OnConnected>(this, connection.input.node?.name, "onConnected")(connection);
+              hook<OnConnected>(this, connection.output.node?.name, "onConnected")(connection);
+          });
+
+          this.on("connectionremove", connection => {
+              if (!hook<OnDisconnect>(this, connection.input.node?.name, "onDisconnect")(connection) ||
+                  !hook<OnDisconnect>(this, connection.output.node?.name, "onDisconnect")(connection))
+                  return false;
+          });
+
+          this.on("connectionremoved", connection => {
+              hook<OnDisconnected>(this, connection.input.node?.name, "onDisconnected")(connection);
+              hook<OnDisconnected>(this, connection.output.node?.name, "onDisconnected")(connection);
+          });
+      }
   }
 }

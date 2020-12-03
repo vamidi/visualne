@@ -2,4 +2,7 @@ dist
 
 node_modules
 
+types
+
 rollup.config.js
+rollup.minify.config.js

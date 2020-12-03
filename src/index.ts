@@ -3,7 +3,6 @@ import { Connection } from "./connection";
 import { Context } from "./core/context";
 import { Control } from "./control";
 import { Emitter } from "./core/emitter";
-import { HashSet } from './core/data';
 import { IO } from "./io";
 import { Input } from "./input";
 import { Node } from "./node";
@@ -19,7 +18,6 @@ export { Control } from "./control";
 export { Connection } from "./connection";
 export { Context } from "./core/context";
 export { Emitter } from "./core/emitter";
-export { HashSet } from "./core/data";
 export { IO } from "./io";
 export { Input } from "./input";
 export { Node } from "./node";
@@ -28,6 +26,7 @@ export { Output } from "./output";
 export { Plugin } from "./core/plugin";
 export { Socket } from "./socket";
 
+export * from "./core/interfaces";
 export default {
     Engine,
     Recursion,
@@ -36,7 +35,6 @@ export default {
     Connection,
     Context,
     Emitter,
-    HashSet,
     Input,
     IO,
     Node,

@@ -14,3 +14,4 @@ test
 
 package-lock.json
 rollup.config.js
+rollup.minify.config.js
