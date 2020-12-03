@@ -213,7 +213,7 @@ export class NodeEditor extends Context<EventsTypes>
               hook<OnDestroyed>(this, node.name, "onDestroyed")(node)
           );
 
-          this.on("connectioncreate", ({input, output}) => {
+          this.on("connectioncreate", ({ input, output }) => {
               if (!hook<OnConnect>(this, input.node?.name, "onConnected")(input) ||
                   !hook<OnConnect>(this, output.node?.name, "onConnected")(output))
                   return false;

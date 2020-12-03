@@ -14,11 +14,7 @@ export class Output extends IO {
         super(key, title, socket, multiConns);
     }
 
-    hasConnection() {
-        return this.connections.size > 0;
-    }
-
-    connectTo(input: Input) {
+    connectTo(input: Input): Connection {
         if (!this.socket.compatibleWith(input.socket))
             throw new Error("Sockets not compatible");
         if (!input.multipleConnections && input.hasConnection())
@@ -28,19 +24,19 @@ export class Output extends IO {
 
         const connection = new Connection(this, input);
 
-        this.connections.add(connection);
+        this.connections.push(connection);
         return connection;
     }
 
-    connectedTo(input: Input) {
-        return [...this.connections].some((item) => {
+    connectedTo(input: Input): boolean {
+        return this.connections.some((item) => {
             return item.input === input;
         });
     }
 
     toJSON(): OutputData {
         return {
-            connections: [...this.connections].map((c) => {
+            connections: this.connections.map((c) => {
                 if (!c.input.node) throw new Error("Node not added to Input");
 
                 return {

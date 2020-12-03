@@ -21,11 +21,15 @@ export class IO {
       this.socket = socket;
   }
 
-  removeConnection(connection: Connection) {
+  public hasConnection(): boolean {
+      return this.connections.length > 0;
+  }
+
+  public removeConnection(connection: Connection): void {
       this.connections.splice(this.connections.indexOf(connection), 1);
   }
 
-  removeConnections() {
+  public removeConnections(): void {
       this.connections.forEach((connection) => this.removeConnection(connection));
   }
 }

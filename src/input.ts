@@ -16,22 +16,18 @@ export class Input extends IO {
       super(key, title, socket, multiConns);
   }
 
-  hasConnection() {
-      return this.connections.size > 0;
-  }
-
-  addConnection(connection: Connection) {
+  addConnection(connection: Connection): void {
       if (!this.multipleConnections && this.hasConnection())
           throw new Error("Multiple connections not allowed");
-      this.connections.add(connection);
+      this.connections.push(connection);
   }
 
-  addControl(control: Control) {
+  addControl(control: Control): void {
       this.control = control;
       control.parent = this;
   }
 
-  showControl() {
+  showControl(): boolean {
       return !this.hasConnection() && this.control !== null;
   }
 
