@@ -203,8 +203,8 @@ export class NodeEditor extends Context<EventsTypes> {
       );
 
       this.on("connectioncreate", ({ input, output }) => {
-        if (!hook<OnConnect>(this, input.node?.name, "onConnected")(input) ||
-          !hook<OnConnect>(this, output.node?.name, "onConnected")(output))
+        if (hook<OnConnect>(this, input.node?.name, 'onConnect')(input) === false ||
+          hook<OnConnect>(this, output.node?.name, 'onConnect')(output) === false)
           return false;
       });
 
@@ -214,8 +214,8 @@ export class NodeEditor extends Context<EventsTypes> {
       });
 
       this.on("connectionremove", connection => {
-        if (!hook<OnDisconnect>(this, connection.input.node?.name, "onDisconnect")(connection) ||
-          !hook<OnDisconnect>(this, connection.output.node?.name, "onDisconnect")(connection))
+        if (hook<OnDisconnect>(this, connection.input.node?.name, 'onDisconnect')(connection) === false ||
+          hook<OnDisconnect>(this, connection.output.node?.name, 'onDisconnect')(connection) === false)
           return false;
       });
 

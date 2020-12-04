@@ -13,7 +13,11 @@ export class Socket
     public get Color(): string { return this.color; }
     public set Color(c: string) { this.color = c; }
 
+    public get Connected(): boolean { return this.connected; }
+    public set Connected(c: boolean) { this.connected = c; }
+
     private color: string;
+    private connected: boolean = false;
 
     constructor(name: string, color: string = "#fff", data = {}) {
         this.name = name;

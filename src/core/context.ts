@@ -61,7 +61,7 @@ export abstract class Context<EventsTypes> extends Emitter<EventsTypes & Default
     return component as T;
   }
 
-  public connect(_output: Output, _input: Input, _data: unknown): void { }
+  public connect(_output: Output, _input: Input, _data: unknown = {}): void { }
 
   public removeConnection(_connection: Connection): void { }
 

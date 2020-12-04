@@ -12,7 +12,7 @@ export interface OnDestroyed {
 }
 
 export interface OnConnect {
-  onConnected(io: Input | Output): boolean;
+  onConnect(io: Input | Output): boolean;
 }
 
 export interface OnConnected {
