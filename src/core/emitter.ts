@@ -24,26 +24,6 @@ export class Emitter<EventTypes> {
       return this;
   }
 
-  /**
-   * Unsubscribe to events
-   */
-  off<K extends keyof EventTypes>(
-      names: K | K[],
-      handler: (args: EventTypes[K]) => void | unknown
-  ): this
-  {
-      const events =
-        names instanceof Array ? names : (names as string).split(" ");
-
-      (events as string[]).forEach((name) => {
-          if (!this.events[name])
-              throw new Error(`The event ${name} does not exist`);
-          this.events[name].splice(this.events[name].indexOf(handler), 1);
-      });
-
-      return this;
-  }
-
   trigger<K extends keyof EventTypes>(
       name: K,
       params: EventTypes[K] | {} = {}
