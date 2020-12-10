@@ -5,114 +5,116 @@ import { ConnectionView } from "./connection";
 import { Emitter } from "../core/emitter";
 import { EventsTypes } from "../events";
 import { Node } from "../node";
+import { NodeEditor } from "../editor";
 import { NodeView } from "./node";
 import { listenWindow } from "./utils";
 
 export class EditorView extends Emitter<EventsTypes> {
-    container: HTMLElement;
-    components: Map<string, Component>;
-    nodes = new Map<Node, NodeView>();
-    connections = new Map<Connection, ConnectionView>();
-    area: Area;
+  nodeEditor: NodeEditor;
+  container: HTMLElement;
+  components: Map<string, Component>;
+  nodes = new Map<Node, NodeView>();
+  connections = new Map<Connection, ConnectionView>();
+  area: Area;
 
-    constructor(container: HTMLElement, components: Map<string, Component>, emitter: Emitter<EventsTypes>)
-    {
-        super(emitter);
+  constructor(container: HTMLElement, components: Map<string, Component>, emitter: Emitter<EventsTypes>) {
+    super(emitter);
 
-        this.container = container;
-        this.components = components;
+    this.nodeEditor = <NodeEditor>emitter;
+    this.container = container;
+    this.components = components;
 
-        this.container.style.overflow = "hidden";
+    this.container.style.overflow = "hidden";
 
-        this.container.addEventListener("click", this.click.bind(this));
-        this.container.addEventListener("contextmenu", (e) =>
-            this.trigger("contextmenu", { e, view: this })
-        );
-        emitter.on("destroy", listenWindow("resize", this.resize.bind(this)));
-        emitter.on("destroy", () => this.nodes.forEach((view) => view.destroy()));
+    this.container.addEventListener("click", this.click.bind(this));
+    this.container.addEventListener("contextmenu", (e) =>
+      this.trigger("contextmenu", { e, view: this })
+    );
+    emitter.on("destroy", listenWindow("resize", this.resize.bind(this)));
+    emitter.on("destroy", () => this.nodes.forEach((view) => view.destroy()));
 
-        this.on("nodetranslated", this.updateConnections.bind(this));
+    this.on("nodetranslated", this.updateConnections.bind(this));
 
-        this.area = new Area(container, this);
-        this.container.appendChild(this.area.el);
+    this.area = new Area(container, this);
+    this.container.appendChild(this.area.el);
+  }
+
+  addNode(node: Node): void {
+    const component = this.components.get(node.name);
+
+    if (!component) throw new Error(`Component ${node.name} not found`);
+
+    const nodeView = new NodeView(node, component, this);
+
+    this.nodes.set(node, nodeView);
+    this.area.appendChild(nodeView.el);
+  }
+
+  removeNode(node: Node): void {
+    const nodeView = this.nodes.get(node);
+
+    this.nodes.delete(node);
+    if (nodeView) {
+      this.area.removeChild(nodeView.el);
+      nodeView.destroy();
     }
+  }
 
-    addNode(node: Node): void {
-        const component = this.components.get(node.name);
+  addConnection(connection: Connection): void {
+    if (!connection.input.node || !connection.output.node)
+      throw new Error("Connection input or output not added to node");
 
-        if (!component) throw new Error(`Component ${node.name} not found`);
+    const viewInput = this.nodes.get(connection.input.node);
+    const viewOutput = this.nodes.get(connection.output.node);
 
-        const nodeView = new NodeView(node, component, this);
+    if (!viewInput || !viewOutput)
+      throw new Error("View node not found for input or output");
 
-        this.nodes.set(node, nodeView);
-        this.area.appendChild(nodeView.el);
-    }
+    const connView = new ConnectionView(
+      connection,
+      viewInput,
+      viewOutput,
+      this
+    );
 
-    removeNode(node: Node): void {
-        const nodeView = this.nodes.get(node);
+    this.connections.set(connection, connView);
+    this.area.appendChild(connView.el);
+  }
 
-        this.nodes.delete(node);
-        if (nodeView) {
-            this.area.removeChild(nodeView.el);
-            nodeView.destroy();
-        }
-    }
+  removeConnection(connection: Connection): void {
+    const connView = this.connections.get(connection);
 
-    addConnection(connection: Connection): void {
-        if (!connection.input.node || !connection.output.node)
-            throw new Error("Connection input or output not added to node");
+    this.connections.delete(connection);
+    if (connView) this.area.removeChild(connView.el);
+  }
 
-        const viewInput = this.nodes.get(connection.input.node);
-        const viewOutput = this.nodes.get(connection.output.node);
+  updateConnections({ node }: { node: Node }): void {
+    node.getConnections().forEach((conn) => {
+      const connView = this.connections.get(conn);
 
-        if (!viewInput || !viewOutput)
-            throw new Error("View node not found for input or output");
+      if (!connView) throw new Error("Connection view not found");
 
-        const connView = new ConnectionView(
-            connection,
-            viewInput,
-            viewOutput,
-            this
-        );
+      connView.update();
+    });
+  }
 
-        this.connections.set(connection, connView);
-        this.area.appendChild(connView.el);
-    }
+  resize(): void {
+    const { container } = this;
 
-    removeConnection(connection: Connection): void {
-        const connView = this.connections.get(connection);
+    if (!container.parentElement)
+      throw new Error("Container doesn't have parent element");
 
-        this.connections.delete(connection);
-        if (connView) this.area.removeChild(connView.el);
-    }
+    const width = container.parentElement.clientWidth;
+    const height = container.parentElement.clientHeight;
 
-    updateConnections({ node }: { node: Node }): void {
-        node.getConnections().forEach((conn) => {
-            const connView = this.connections.get(conn);
+    container.style.width = width + "px";
+    container.style.height = height + "px";
+  }
 
-            if (!connView) throw new Error("Connection view not found");
+  click(e: Event): void {
+    const container = this.container;
 
-            connView.update();
-        });
-    }
-
-    resize(): void {
-        const { container } = this;
-
-        if (!container.parentElement)
-            throw new Error("Container doesn't have parent element");
-
-        const width = container.parentElement.clientWidth;
-        const height = container.parentElement.clientHeight;
-
-        container.style.width = width + "px";
-        container.style.height = height + "px";
-    }
-
-    click(e: Event): void {
-        const container = this.container;
-
-        if (container !== e.target) return;
-        if (!this.trigger("click", { e, container })) return;
-    }
+    if (container !== e.target) return;
+    if (!this.trigger("click", { e, container })) return;
+  }
 }

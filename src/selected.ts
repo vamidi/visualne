@@ -1,26 +1,28 @@
 import { Node } from "./node";
 
 export class Selected {
-  list: Set<Node> = new Set<Node>();
+  list: Node[] = [];
 
-  add(item: Node, accumulate = false) {
-      if (!accumulate) this.list = new Set([item]);
-      else if (!this.contains(item)) this.list.add(item);
+  add(item: Node, accumulate = false): void {
+    if (!accumulate)
+      this.list = [item];
+    else if (!this.contains(item))
+      this.list.push(item);
   }
 
-  clear() {
-      this.list = new Set<Node>();
+  clear(): void {
+    this.list = [];
   }
 
-  remove(item: Node) {
-      this.list.delete(item);
+  remove(item: Node): void {
+    this.list.splice(this.list.indexOf(item), 1);
   }
 
-  contains(item: Node) {
-      return this.list.has(item);
+  contains(item: Node): boolean {
+    return this.list.indexOf(item) !== -1;
   }
 
-  each(callback: (n: Node, key: Node) => void) {
-      this.list.forEach(callback);
+  each(callback: (n: Node, index: number) => void): void {
+    this.list.forEach(callback);
   }
 }

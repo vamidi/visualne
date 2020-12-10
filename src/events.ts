@@ -2,7 +2,7 @@ import { Component } from "./component";
 import { Connection } from "./connection";
 import { Control } from "./control";
 import { Data } from "./core/data";
-import { EditorView } from "./view";
+import { EditorView } from "./view/index";
 import { Input } from "./input";
 import { Node } from "./node";
 import { Output } from "./output";
@@ -11,45 +11,49 @@ import { EventsTypes as DefaultEventsTypes, Events } from "./core/events";
 import { Mouse, Transform, ZoomSource } from "./view/area";
 
 export class EditorEvents extends Events {
-    constructor() {
-        super({
-            nodecreate: [],
-            nodecreated: [],
-            noderemove: [],
-            noderemoved: [],
-            connectioncreate: [],
-            connectioncreated: [],
-            connectionremove: [],
-            connectionremoved: [],
-            translatenode: [],
-            nodetranslate: [],
-            nodetranslated: [],
-            nodedraged: [],
-            nodedragged: [],
-            selectnode: [],
-            multiselectnode: [],
-            nodeselect: [],
-            nodeselected: [],
-            rendernode: [],
-            rendersocket: [],
-            rendercontrol: [],
-            renderconnection: [],
-            updateconnection: [],
-            keydown: [],
-            keyup: [],
-            translate: [],
-            translated: [],
-            zoom: [],
-            zoomed: [],
-            click: [],
-            mousemove: [],
-            contextmenu: [],
-            import: [],
-            export: [],
-            process: [],
-            clear: []
-        });
-    }
+  constructor() {
+    super({
+      nodecreate: [],
+      nodecreated: [],
+      noderemove: [],
+      noderemoved: [],
+      connectioncreate: [],
+      connectioncreated: [],
+      connectionremove: [],
+      connectionremoved: [],
+      translatenode: [],
+      nodetranslate: [],
+      nodetranslated: [],
+      nodedraged: [],
+      nodedragged: [],
+      selectnode: [],
+      deselectnode: [],
+      multiselectnode: [],
+      multideselectnode: [],
+      nodeselect: [],
+      nodedeselect: [],
+      nodeselected: [],
+      nodedeselected: [],
+      rendernode: [],
+      rendersocket: [],
+      rendercontrol: [],
+      renderconnection: [],
+      updateconnection: [],
+      keydown: [],
+      keyup: [],
+      translate: [],
+      translated: [],
+      zoom: [],
+      zoomed: [],
+      click: [],
+      mousemove: [],
+      contextmenu: [],
+      import: [],
+      export: [],
+      process: [],
+      clear: []
+    });
+  }
 }
 
 export interface EventsTypes extends DefaultEventsTypes {
@@ -71,13 +75,22 @@ export interface EventsTypes extends DefaultEventsTypes {
     node: Node;
     accumulate: boolean;
   };
+  deselectnode: {
+    node: Node;
+  }
   multiselectnode: {
     node: Node;
     accumulate: boolean;
     e: MouseEvent;
   };
+  multideselectnode: {
+    node: Node;
+    e: MouseEvent;
+  }
   nodeselect: Node;
   nodeselected: Node;
+  nodedeselect: Node;
+  nodedeselected: Node;
   rendernode: {
     el: HTMLElement;
     node: Node;

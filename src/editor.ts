@@ -81,6 +81,31 @@ export class NodeEditor extends Context<EventsTypes> {
     this.trigger("nodeselected", node);
   }
 
+  public deselectNode(node: Node): void
+  {
+    if (this.nodes.indexOf(node) === -1) throw new Error("Node not exist in list");
+
+    if (!this.trigger("nodedeselect", node)) return;
+
+    this.selected.remove(node);
+
+    this.trigger("nodedeselected", node);
+  }
+
+  public deselect(): void
+  {
+    // if we have no nodes
+    if (!this.nodes.length) return;
+
+    this.selected.each((node) => {
+      if (!this.trigger("nodedeselect", node)) return;
+
+      this.selected.remove(node);
+
+      this.trigger("nodedeselected", node);
+    });
+  }
+
   public register(component: Component): void {
     super.register(component);
     component.editor = this;
@@ -163,18 +188,24 @@ export class NodeEditor extends Context<EventsTypes> {
   }
 
   protected initEvents(): void {
-    this.on(
-      "destroy",
+    this.on("destroy",
       listenWindow("keydown", (e) => this.trigger("keydown", e))
     );
-    this.on(
-      "destroy",
+    this.on("destroy",
       listenWindow("keyup", (e) => this.trigger("keyup", e))
     );
 
     this.on("selectnode", ({ node, accumulate }) =>
       this.selectNode(node, accumulate)
     );
+
+    this.on("deselectnode", ({ node }) =>
+      this.deselectNode(node)
+    );
+
+    this.on("click", () => {
+      this.deselect();
+    });
 
     this.on("nodeselected", () =>
       this.selected.each((n) => {
