@@ -1,6 +1,6 @@
 {
 	"name": "visualne",
-	"version": "1.0.11",
+	"version": "1.1.0",
 	"description": "A Javascript framework for visual editing projects",
 	"main": "dist/visualne.common.js",
 	"module": "dist/visualne.esm.js",
