@@ -40,6 +40,7 @@ export interface NodesData {
 export interface Data {
     id: string;
     nodes: NodesData;
+    [key:string]: unknown;
 }
 
 export interface WorkerInputs {
