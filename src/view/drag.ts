@@ -1,6 +1,6 @@
 import { listenWindow } from "./utils";
 
-enum EPointerButton {
+export enum EPointerButton {
   LEFT_CLICK = 0, // Main button pressed, usually the left button or the un-initialized state
   MIDDLE_CLICK = 1, // Auxiliary button pressed, usually the wheel button or the middle button (if present)
   RIGHT_CLICK = 2, // Secondary button pressed, usually the right button
