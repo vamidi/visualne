@@ -1,13 +1,11 @@
 import babel from 'rollup-plugin-babel';
 import resolve from 'rollup-plugin-node-resolve';
 import sourcemaps from 'rollup-plugin-sourcemaps';
-import { terser } from "rollup-plugin-terser";
 import { eslint } from 'rollup-plugin-eslint';
 
 // const path = require('path');
 
 const extensions = ['.js', '.jsx', '.ts', '.tsx'];
-const production = !process.env.ROLLUP_WATCH;
 const bundle = 'visualne'
 
 module.exports = {
@@ -15,14 +13,18 @@ module.exports = {
     input: 'src/index.ts',
     output: [
         {
+            name: 'VisualNE',
             sourceMap: true,
             file: `dist/${bundle}.common.js`,
-            format: 'cjs'
+            format: 'cjs',
+            exports: 'named',
         },
         {
+            name: 'VisualNE',
             sourceMap: true,
             file: `dist/${bundle}.esm.js`,
-            format: 'esm'
+            format: 'esm',
+            exports: 'named',
         }
     ],
     plugins: [

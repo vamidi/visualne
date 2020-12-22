@@ -18,7 +18,8 @@ module.exports = {
             name: 'VisualNE',
             sourceMap: true,
             file: `dist/${bundle}.min.js`,
-            format: 'umd'
+            format: 'umd',
+            exports: 'named',
         },
     ],
     plugins: [

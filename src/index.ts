@@ -27,6 +27,7 @@ export { Plugin } from "./core/plugin";
 export { Socket } from "./socket";
 
 export * from "./core/interfaces";
+export { EPointerButton, listenWindow } from "./view/index";
 export default {
     Engine,
     Recursion,

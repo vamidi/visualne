@@ -1,6 +1,7 @@
 import { Area } from "./area";
-import { Drag } from "./drag";
 import { EditorView } from "./editor-view";
 import { Zoom } from "./zoom";
+import { listenWindow } from "./utils";
+import { Drag, EPointerButton } from "./drag";
 
-export { Area, Drag, EditorView, Zoom };
+export { Area, Drag, EPointerButton, EditorView, listenWindow, Zoom };
